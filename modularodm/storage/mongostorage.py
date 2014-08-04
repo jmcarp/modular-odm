@@ -119,9 +119,21 @@ class MongoStorage(Storage):
     def _ensure_index(self, key):
         self.store.ensure_index(key)
 
-    def __init__(self, db, collection):
+    def __init__(self, client, database, collection):
+        """
+
+        :param MongoClient client:
+        :param str database:
+        :param str collection:
+
+        """
+        self.client = client
+        self.database = database
         self.collection = collection
-        self.store = db[self.collection]
+
+    @property
+    def store(self):
+        return self.client[self.database][self.collection]
 
     def find(self, query=None, **kwargs):
         mongo_query = self._translate_query(query)

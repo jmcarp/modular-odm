@@ -60,7 +60,7 @@ class MongoStorageMixin(object):
     mongo_client = pymongo.MongoClient(
         host=DB_HOST,
         port=DB_PORT,
-    ).modm_test
+    )
 
     def make_storage(self):
 
@@ -74,13 +74,14 @@ class MongoStorageMixin(object):
         # logger.debug(self.mongo_collections)
 
         return MongoStorage(
-            db=self.mongo_client,
-            collection=collection
+            client=self.mongo_client,
+            database='modm_test',
+            collection=collection,
         )
 
     def clean_up_storage(self):
         for c in self.mongo_collections:
-            self.mongo_client.drop_collection(c)
+            self.mongo_client.modm_test.drop_collection(c)
 
 
 class MultipleBackendMeta(type):
